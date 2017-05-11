@@ -55,7 +55,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'jquery-rails', '~> 4.3.1'
 
-gem 'bootstrap-sass', '~> 3.2.0'
-
 gem 'google-api-client', '~> 0.11'
-gem 'redis'
+
+gem 'jquery-ui-rails'

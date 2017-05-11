@@ -1,0 +1,134 @@
+<div class="container-fluid">
+  <div class="row row-eq-height">
+    <div class="col-sm-4">
+      <div class="box">
+        <h3>Select View</h3>
+        <% account = params.has_key?(:account) ? @accounts.select{ |s| s.id == params[:account] }[0] : @accounts[0] %>
+        <% properties = account.web_properties %>
+        <% property = params.has_key?(:property) ? properties.select{ |s| s.id == params[:property] }[0] : properties[0] %>
+        <% views = property.profiles %>
+        <% view = params.has_key?(:view) ? params[:view] : property.profiles[0] %>
+        <%= form_tag request.path, method: :get do %>
+          <div class="form-group">
+            <%= label_tag :accont %>
+            <%= select_tag :account, options_from_collection_for_select(@accounts, :id, :name, params[:account]) %>
+          </div>
+          <div class="form-group">
+            <%= label_tag :property %>
+            <%= select_tag :property, options_from_collection_for_select(properties, :id, :name, params[:property]) %>
+          </div>
+          <div class="form-group">
+            <%= label_tag :view %>
+            <%= select_tag :view, options_from_collection_for_select(views, :id, :name, params[:view]) %>
+          </div>
+            <%= submit_tag :show, value: 'Show', class: 'btn btn-red' %>
+      <% end %>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="box">
+        <div class="text-right"><%= link_to('Edit', edit_report_path(@report.id)) %></div>
+        <h3>Report parameters</h3>
+
+        <div><label>Ids</label><%= @ga_view %></div>
+        <div><label>Start Date</label><%= @report.start_date %></div>
+        <div><label>End Date</label><%= @report.end_date %></div>
+        <div><label>Metrics</label><%= @report.metrics %></div>
+        <div><label>Dimensions</label><%= @report.dimensions %></div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt20">
+    <div class="col-sm-12">
+      <div class="box">
+        <% if @result.reports.any? %>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <% unless @result.reports[0].column_header.dimensions.nil? %>
+                    <% @result.reports[0].column_header.dimensions.each do |d| %>
+                      <th><%= d %></th>
+                    <% end %>
+                <% end %>
+                <% @result.reports[0].column_header.metric_header.metric_header_entries.each do |m| %>
+                    <th><%= m.name %></th>
+                <% end %>
+              </tr>
+              </thead>
+              <tbody>
+              <% @result.reports[0].data.rows.each do |row| %>
+                  <tr>
+                    <% unless row.dimensions.nil? %>
+                        <% row.dimensions.each do |d| %>
+                            <td><%= d %></td>
+                        <% end %>
+                    <% end %>
+                    <% row.metrics[0].values.each do |m| %>
+                        <td><%= m %></td>
+                    <% end %>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+
+        <% else %>
+            <p class="text-notice bg-notice msg">No Data</p>
+        <% end%>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+    var account_summaries = <%= @accounts.to_json.html_safe %>;
+
+    $('#account').change(function(){
+      var account_summary_id = this.value;
+      var account_summary = $.grep(account_summaries, function(e){ return e.id == account_summary_id; });
+
+      var web_properties = [];
+      if (!$.isEmptyObject(account_summary)){
+        web_properties = account_summary[0].web_properties;
+      }
+
+      var profiles = [];
+      if (!$.isEmptyObject(web_properties)){
+        profiles = web_properties[0].profiles;
+      }
+
+      $('#property').html('');
+      $('#view').html('');
+
+      $.each(web_properties, function(index, value){
+        $('#property').append($('<option>').val(value.id).text(value.name));
+      });
+      $.each(profiles, function(index, value){
+        $('#view').append($('<option>').val(value.id).text(value.name));
+      });
+    });
+
+    $('#property').change(function(){
+      var web_property_id = this.value;
+
+      var account_summary_id = $('#account').val();
+      var account_summary = $.grep(account_summaries, function(e){ return e.id == account_summary_id; });
+
+      var web_properties = [];
+      if (!$.isEmptyObject(account_summary)){
+        web_properties = account_summary[0].web_properties;
+      }
+
+      var web_property = $.grep(web_properties, function(e){ return e.id == web_property_id; });
+
+      var profiles = [];
+      if (!$.isEmptyObject(web_property)){
+        profiles = web_property[0].profiles;
+      }
+
+      $('#view').html('');
+      $.each(profiles, function(index, value){
+        $('#view').append($('<option>').val(value.id).text(value.name));
+      });
+    });
+<% end %>

@@ -5,4 +5,7 @@ Rails.application.routes.draw do
   get '/oauth', to: 'sessions#oauth'
   get '/signout', to: 'sessions#destroy'
 
+  resources :reports
+  root to: 'reports#index'
+
 end

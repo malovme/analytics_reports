@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Metrics</th>
+        <th>Dimensions</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @reports.each do |report| %>
+        <tr>
+          <td><%= report.id %></td>
+          <td><%= link_to report.name, report_path(report.id) %></td>
+          <td><%= report.start_date %></td>
+          <td><%= report.end_date %></td>
+          <td><%= report.metrics %></td>
+          <td><%= report.dimensions %></td>
+          <td>
+            <%= link_to('Edit', edit_report_path(report.id)) %>
+            <%= link_to('Delete', report, method: :delete, data: {confirm: 'Are you sure?'}) %>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+</div>

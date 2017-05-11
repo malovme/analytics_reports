@@ -1,0 +1,13 @@
+<div class="container-fluid">
+  <div class="row row-eq-height">
+    <div class="col-sm-12">
+      <div class="box">
+        <h3>Edit Report</h3>
+        <%= form_for @report, url: { action: :update }, html: { class: 'form-horizontal' } do |f| %>
+            <%= render :partial => 'form', :locals => { :f => f } %>
+            <%= submit_tag :save, value: 'Save', class: 'btn btn-red' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
