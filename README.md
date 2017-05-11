@@ -1,24 +1,10 @@
-# README
+# Google Analytics Reports demo app
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This Ruby on Rails application use **gem google-api-ruby-client** to authorize with OAuth 2.0
+and get Goiogle Analytics data with Analytics Reporting API.
 
-Things you may want to cover:
+It use
 
-* Ruby version
+* Ruby 2.4.1
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Rails 5.1
